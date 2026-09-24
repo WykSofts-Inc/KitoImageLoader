@@ -1,5 +1,7 @@
 # KitoImageLoader
 
+**[Documentation](https://wyksofts-inc.github.io/KitoImageLoader/documentation/kitoimageloader/)**
+
 A cache-backed image and video loader for SwiftUI — memory → disk → network,
 request de-duplication, and configurable loading placeholders drawn from
 [KitoLoaders](https://github.com/WykSofts-Inc/KitoLoaders). Part of the
