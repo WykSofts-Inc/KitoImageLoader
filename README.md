@@ -54,6 +54,54 @@ KitoCachedVideoView(url: heroClipURL, placeholderStyle: .progressRing)
     .frame(height: 260)
 ```
 
+## Showcase components (1.1)
+
+**`KitoRemoteImage`** — shimmer or blur-up while loading, an animated reveal,
+quiet retries with backoff, and a tap-to-retry failure state:
+
+```swift
+KitoRemoteImage(
+    url: listing.photoURL,
+    loading: .blurUp(preview: listing.thumbnailURL),   // or .shimmer, .color, .gradient, .loader(.spinner)
+    appearance: .scaleIn,                               // .fade, .blurIn, .slideUp, .none
+    retry: .standard                                    // 2 retries, 0.8s then 1.6s
+)
+.frame(height: 240)
+.clipShape(RoundedRectangle(cornerRadius: 24))
+```
+
+**Avatars** that fall back to initials on a stable gradient, with story rings
+and presence dots:
+
+```swift
+KitoImageAvatar(url: user.photoURL, name: "Wycliff N", size: 56, ring: .story(animates: true), status: .online)
+KitoImageAvatarStack(attendees, size: 32, maxVisible: 4)   // "+3" for the rest
+```
+
+**Zoom and a full-screen viewer** — pinch, pan, double-tap, swipe between
+photos, drag down to dismiss:
+
+```swift
+KitoZoomableImage(url: photo.url)
+KitoImageViewer(urls: photos, startIndex: 2) { isViewerOpen = false }
+```
+
+**Masonry grid** — a `Layout` that drops each child into the shortest column:
+
+```swift
+KitoMasonryLayout(columns: 2, spacing: 10) {
+    ForEach(photos) { KitoRemoteImage(url: $0.url).aspectRatio($0.aspect, contentMode: .fit) }
+}
+```
+
+**Prefetching and stats:**
+
+```swift
+.kitoPrefetchImages(nextPageURLs)
+let loaded = await KitoImageLoader.shared.prefetchAndWait(urls)
+let stats = await KitoImageLoader.shared.stats()   // hitRate, networkFetches, diskBytes…
+```
+
 ## Architecture
 
 - `KitoImageLoader` / `KitoVideoLoader` — actors owning an in-memory
@@ -69,7 +117,7 @@ KitoCachedVideoView(url: heroClipURL, placeholderStyle: .progressRing)
 ## Installation
 
 ```swift
-.package(url: "https://github.com/WykSofts-Inc/KitoImageLoader.git", from: "1.0.0")
+.package(url: "https://github.com/WykSofts-Inc/KitoImageLoader.git", from: "1.1.0")
 ```
 
 ## Contributing

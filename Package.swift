@@ -14,8 +14,8 @@ let package = Package(
     platforms: [.iOS(.v17)],
     products: [.library(name: "KitoImageLoader", targets: ["KitoImageLoader"])],
     dependencies: [
-        .package(url: "https://github.com/WykSofts-Inc/KitoCore.git", from: "1.0.0"),
-        .package(url: "https://github.com/WykSofts-Inc/KitoLoaders.git", from: "1.0.0"),
+        .package(url: "https://github.com/WykSofts-Inc/KitoCore.git", from: "1.1.0"),
+        .package(url: "https://github.com/WykSofts-Inc/KitoLoaders.git", from: "1.0.1"),
     ],
     targets: [
         .target(
