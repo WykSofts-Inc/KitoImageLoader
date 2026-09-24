@@ -114,6 +114,12 @@ let stats = await KitoImageLoader.shared.stats()   // hitRate, networkFetches, d
   storage under `Caches/`, pruned oldest-accessed-first once a byte budget
   is exceeded.
 
+## Right-to-left
+
+Layouts mirror with the layout direction (the shimmer sweeps from the trailing edge, `KitoImageViewer`
+pages in the reading direction). `KitoZoomableImage` converts on-screen touches, so panning a zoomed
+image follows the finger and double-tap zooms into the point you tapped in either direction.
+
 ## Installation
 
 ```swift

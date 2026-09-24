@@ -35,6 +35,7 @@ public enum KitoZoom {
 /// Springs back inside its bounds when released.
 public struct KitoZoomableImage: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
     let url: URL?
     let loader: KitoImageLoader
     let maxScale: CGFloat
@@ -91,11 +92,15 @@ public struct KitoZoomableImage: View {
             }
     }
 
+    /// Touches are measured on screen, but `offset` mirrors in right-to-left layouts.
+    private var isRightToLeft: Bool { layoutDirection == .rightToLeft }
+
     private func pan(in size: CGSize) -> some Gesture {
         DragGesture(minimumDistance: scale > 1 ? 0 : 10_000)
             .onChanged { value in
                 guard scale > 1 else { return }
-                offset = CGSize(width: baseOffset.width + value.translation.width, height: baseOffset.height + value.translation.height)
+                let dx = isRightToLeft ? -value.translation.width : value.translation.width
+                offset = CGSize(width: baseOffset.width + dx, height: baseOffset.height + value.translation.height)
             }
             .onEnded { _ in
                 withAnimation(spring) { offset = KitoZoom.clampOffset(offset, size: size, scale: scale) }
@@ -110,7 +115,8 @@ public struct KitoZoomableImage: View {
                 offset = .zero
             } else {
                 scale = min(2.5, maxScale)
-                let target = CGSize(width: (size.width / 2 - location.x) * (scale - 1), height: (size.height / 2 - location.y) * (scale - 1))
+                let x = isRightToLeft ? size.width - location.x : location.x
+                let target = CGSize(width: (size.width / 2 - x) * (scale - 1), height: (size.height / 2 - location.y) * (scale - 1))
                 offset = KitoZoom.clampOffset(target, size: size, scale: scale)
             }
         }
